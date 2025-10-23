@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { LoggerModule, Params } from 'nestjs-pino';
-import { LOGGER_CONFIG } from './shared/constants';
+import { INDRA_DAYS, INDRA_HOURS, INDRA_MOMENT, LOGGER_CONFIG } from './shared/constants';
 import { ConfigModule } from './infra/config/config.module';
+import { HttpModule } from './infra/http/http.module';
+import { IndraDaysUseCase } from './application/indra/days/indra-days.use-case';
+import { IndraDaysController } from './presentation/controllers/indra/days/indra-days.controller';
+import { IndraHoursUseCase } from './application/indra/hours/indra-hours.use-case';
+import { IndraHoursController } from './presentation/controllers/indra/hours/indra-hours.controller';
+import { IndraMomentUseCase } from './application/indra/moment/indra-moment.use-case';
+import { IndraMomentController } from './presentation/controllers/indra/moment/indra-moment.controller';
 
 @Module({
   imports: [
@@ -12,8 +17,13 @@ import { ConfigModule } from './infra/config/config.module';
       inject: [LOGGER_CONFIG],
       useFactory: (config: Params) => config,
     }),
+    HttpModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [IndraDaysController, IndraHoursController, IndraMomentController],
+  providers: [
+    { provide: INDRA_DAYS, useClass: IndraDaysUseCase },
+    { provide: INDRA_HOURS, useClass: IndraHoursUseCase },
+    { provide: INDRA_MOMENT, useClass: IndraMomentUseCase },
+  ],
 })
 export class AppModule {}

@@ -1,85 +1,129 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🌤️ Lumina Indra API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este projeto é uma API simples desenvolvida em **NestJS** que consulta duas fontes de previsão do tempo para garantir **alta disponibilidade e confiabilidade** dos dados.  
+A arquitetura segue os princípios de **Clean Architecture**, e inclui boas práticas de **logs, documentação e padronização de commits**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Tecnologias Utilizadas
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **[NestJS](https://nestjs.com/)** – framework Node.js com suporte nativo a TypeScript, modular e escalável.
+- **[Pino](https://github.com/pinojs/pino)** e **[pino-http](https://github.com/pinojs/pino-http)** – para geração de logs de alta performance e fácil integração com ferramentas de observabilidade.
+- **[Swagger](https://swagger.io/)** – documentação automática disponível em:
+  ```
+  http://localhost:3000/api-doc
+  ```
+- **[Husky](https://typicode.github.io/husky/)** + **[Commitlint](https://commitlint.js.org/)** + **[Lint-Staged](https://github.com/okonet/lint-staged)** – para garantir qualidade e padronização nos commits.
+- **Clean Architecture** – organização de código em camadas bem definidas (Domain, Application, Infra, Presentation, Shared).
 
-## Project setup
+---
 
+## ☁️ APIs de Clima
+
+O sistema utiliza **duas APIs diferentes** para buscar previsões meteorológicas:
+1. **OpenWeather** → [https://openweathermap.org/](https://openweathermap.org/)
+2. **Visual Crossing** → [https://www.visualcrossing.com/](https://www.visualcrossing.com/)
+
+> 💡 Caso uma das APIs esteja indisponível, o sistema automaticamente consulta a outra — garantindo que sempre haja uma previsão válida para retornar.
+
+---
+
+## 🔐 Configuração do Ambiente
+
+### 1. Criar o arquivo `.env`
+
+Copie o modelo de configuração:
 ```bash
-$ yarn install
+cp .env.example .env
 ```
 
-## Compile and run the project
+### 2. Obter as chaves de API
+
+#### 🔸 OpenWeather
+1. Crie uma conta gratuita em [https://openweathermap.org/](https://openweathermap.org/)
+2. Vá em **"My API keys"** no painel do usuário
+3. Copie sua **API key**
+4. Cole no seu `.env`:
+   ```bash
+   WEATHER_API_KEY=your_openweather_api_key_here
+   ```
+
+#### 🔸 Visual Crossing
+1. Crie uma conta em [https://www.visualcrossing.com/](https://www.visualcrossing.com/)
+2. Após o login, acesse **Account → API Keys**
+3. Copie sua **API key**
+4. Cole no seu `.env`:
+   ```bash
+   VISUAL_CROSSING_API_KEY=your_visual_crossing_api_key_here
+   ```
+
+> As URLs base e coordenadas de teste já estão configuradas no `.env.example`.
+
+---
+
+## 💾 Cache e Desempenho
+
+Inicialmente foi considerado o uso de **Redis** para armazenar respostas em cache por até 10 minutos.  
+Entretanto, por se tratar de um projeto simples, essa camada foi descartada para manter o código mais direto e didático.
+
+---
+
+## 🧩 Estrutura e Arquitetura
+
+O projeto segue **Clean Architecture**, separando bem as camadas:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+src/
+ ├── application/      # Casos de uso e lógica de negócio
+ ├── domain/           # Entidades e contratos
+ ├── infra/            # Integração com APIs externas, persistência etc.
+ ├── presentation/     # Controllers, DTOs e rotas (NestJS)
+ └── shared/           # Constants, Interceptors, Utils
 ```
 
-## Run tests
+Essa abordagem facilita testes, manutenção e evolução do código.
+
+---
+
+## 🧠 Convenções e Qualidade de Código
+
+### 1. Husky
+Antes de qualquer commit, o Husky é executado para garantir a padronização e evitar que commits fora do padrão sejam aceitos.  
+Para habilitá-lo, execute:
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+npx husky install
 ```
 
-## Resources
+### 2. Commitlint
+Valida mensagens de commit conforme o padrão [Conventional Commits](https://www.conventionalcommits.org/).  
+Exemplo válido:
+```bash
+feat: add fallback to Visual Crossing API
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### 3. Lint-Staged
+Executa o lint apenas nos arquivos modificados, garantindo performance e qualidade antes do commit.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+## 🧭 Executando o Projeto
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# Instalar dependências
+npm install ou yarn
 
-## Stay in touch
+# Rodar em modo desenvolvimento
+npm run start:dev ou yarn start:dev
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# Acessar documentação Swagger
+http://localhost:3000/api-docs
+```
 
-## License
+A porta **3000** é fixa (valor mágico definido para simplificar o desenvolvimento local).
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+## 🧑‍💻 Autor
+
+Desenvolvido por Joel Gonçalves

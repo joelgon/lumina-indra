@@ -89,11 +89,11 @@ Essa abordagem facilita testes, manutenção e evolução do código.
 ## 🧠 Convenções e Qualidade de Código
 
 ### 1. Husky
-Antes de qualquer commit, o Husky é executado para garantir a padronização e evitar que commits fora do padrão sejam aceitos.  
-Para habilitá-lo, execute:
+O Husky é usado para garantir que todos os commits sigam as convenções definidas e que os testes e o lint sejam executados antes de cada commit.  
+O script `prepare` já está configurado no `package.json`, portanto **o Husky será instalado automaticamente** após o comando:
 
 ```bash
-npx husky install
+npm install ou yarn
 ```
 
 ### 2. Commitlint

@@ -5,11 +5,15 @@ import { Logger } from 'nestjs-pino';
 import { ValidationPipe } from '@nestjs/common';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { ResponseBodyInterceptor } from './shared/interceptors/response.interceptor';
+import { DocSetup } from './infra/doc/doc.setup';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), { bufferLogs: true });
 
   app.useGlobalInterceptors(new ResponseBodyInterceptor());
+
+  await DocSetup.execute(app);
+
   app.register(cors, {
     origin: '*',
   });
@@ -20,4 +24,5 @@ async function bootstrap() {
 
   await app.listen(3000, '0.0.0.0');
 }
+
 bootstrap();

@@ -1,12 +1,61 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { DateFormatUtil } from '@src/shared/utils/date-format.util';
 
 export class IndraEntity {
+  @ApiProperty({
+    example: 'Nublado',
+    description: 'Condiciones climáticas',
+    type: String,
+    required: true,
+  })
   conditions: string;
+
+  @ApiProperty({
+    example: 17.5,
+    description: 'temperature of the day',
+    type: Number,
+    required: true,
+  })
   temperature: number;
+
+  @ApiProperty({
+    example: 15.5,
+    description: 'feels like',
+    type: Number,
+    required: true,
+  })
   feelsLike: number;
+
+  @ApiProperty({
+    example: 'Nublado ao longo do dia',
+    description: 'weather description',
+    type: String,
+    required: true,
+  })
   description: string;
+
+  @ApiProperty({
+    example: 70,
+    description: 'humidity percentage',
+    type: Number,
+    required: true,
+  })
   humidity: number;
+
+  @ApiProperty({
+    example: '2023-10-05 00:00:00',
+    description: 'date of the weather data',
+    type: String,
+    required: true,
+  })
   date: string;
+
+  @ApiProperty({
+    example: 1696435200,
+    description: 'timestamp of the weather data',
+    type: Number,
+    required: true,
+  })
   timestamp: number;
 
   private constructor(

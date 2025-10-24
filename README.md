@@ -1,6 +1,7 @@
 # 🌤️ Lumina Indra API
 
-Este projeto é uma API simples desenvolvida em **NestJS** que consulta duas fontes de previsão do tempo para garantir **alta disponibilidade e confiabilidade** dos dados.  
+Este projeto é uma API simples desenvolvida em **NestJS** que consulta duas fontes de previsão do tempo para garantir **alta disponibilidade e confiabilidade** dos dados.
+O nome *Indra* foi escolhido em referência ao poderoso deus hindu dos céus, relâmpagos e tempestades — símbolo de força, energia e domínio sobre o clima.
 A arquitetura segue os princípios de **Clean Architecture**, e inclui boas práticas de **logs, documentação e padronização de commits**.
 
 ---
